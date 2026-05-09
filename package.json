@@ -1,0 +1,33 @@
+{
+  "name": "course-outline",
+  "widgetName": "CourseOutline",
+  "version": "1.0.0",
+  "description": "Course Content Navigator — LMS-style course outline widget for Mendix",
+  "copyright": "2026",
+  "author": "Raghav",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "config": {
+    "projectPath": "../",
+    "mendixHost": "http://localhost:8080",
+    "developmentPort": "3001"
+  },
+  "packagePath": "mycompany",
+  "scripts": {
+    "start": "pluggable-widgets-tools start:web",
+    "build": "pluggable-widgets-tools build:web",
+    "lint": "pluggable-widgets-tools lint",
+    "lint:fix": "pluggable-widgets-tools lint:fix",
+    "prerelease": "npm run lint",
+    "release": "pluggable-widgets-tools release:web"
+  },
+  "dependencies": {
+    "classnames": "^2.3.2"
+  },
+  "devDependencies": {
+    "@mendix/pluggable-widgets-tools": "10.24.0",
+    "@types/classnames": "^2.3.1"
+  }
+}

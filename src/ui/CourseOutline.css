@@ -1,0 +1,781 @@
+/* ===================================================================
+   Course Content Navigator for Mendix — Styles
+   
+   Professional LMS-style course outline with clean, structured design.
+   Inspired by: Udemy hierarchy + Coursera spacing + Notion typography.
+   
+   Semantic CSS class structure for external styling:
+   
+   .course-nav-root                    → widget root container
+   .course-nav-panel                   → inner panel wrapper
+   .course-nav-summary                 → summary bar (top)
+   .course-nav-content                 → scrollable content area
+   .course-nav-section                 → collapsible section
+   .course-nav-section-header          → section title row (clickable)
+   .course-nav-section-body            → expanded section content
+   .course-nav-item                    → individual content item
+   .course-nav-item--active            → currently selected item
+   .course-nav-item--completed         → completed item
+   .course-nav-item--locked            → locked/disabled item
+   .course-nav-item-row                → clickable item row
+   .course-nav-item-type               → content type icon wrapper
+   .course-nav-item-status             → status indicator icon
+   .course-nav-item-info               → title + metadata area
+   .course-nav-item-expand             → description expand chevron
+   .course-nav-item-desc               → expanded description area
+   .course-nav-item-preview            → "Preview" badge
+   .course-nav-item-duration           → duration display
+   .course-nav-state-empty             → empty state
+   .course-nav-state-loading           → loading state
+   
+   All colors/sizes use CSS custom properties for easy theming.
+   Override via Mendix Styling tab, Design Properties, or external SCSS.
+   =================================================================== */
+
+/* ─── CSS Custom Properties ─── */
+.course-nav-root {
+    --cn-accent: #7c3aed;
+    --cn-accent-light: rgba(124, 58, 237, 0.06);
+    --cn-accent-border: rgba(124, 58, 237, 0.35);
+    --cn-success: #16a34a;
+    --cn-success-light: rgba(22, 163, 74, 0.08);
+    --cn-warning: #f59e0b;
+    --cn-bg: #ffffff;
+    --cn-bg-section: #f9fafb;
+    --cn-bg-hover: rgba(0, 0, 0, 0.03);
+    --cn-bg-active: rgba(124, 58, 237, 0.05);
+    --cn-text: #111827;
+    --cn-text-secondary: #6b7280;
+    --cn-text-dim: #9ca3af;
+    --cn-text-bright: #000000;
+    --cn-border: #e5e7eb;
+    --cn-border-light: #f3f4f6;
+    --cn-radius: 8px;
+    --cn-transition: 0.15s ease;
+    --cn-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    width: 100%;
+    font-family: var(--cn-font);
+    line-height: 1.5;
+    box-sizing: border-box;
+    color: var(--cn-text);
+    background: var(--cn-bg);
+    border: 1px solid var(--cn-border);
+    border-radius: var(--cn-radius);
+    overflow: hidden;
+}
+
+.course-nav-root *,
+.course-nav-root *::before,
+.course-nav-root *::after {
+    box-sizing: inherit;
+}
+
+/* ===================================================================
+   Panel — inner wrapper
+   =================================================================== */
+
+.course-nav-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===================================================================
+   Summary Bar — top statistics + Expand All button
+   =================================================================== */
+
+.course-nav-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--cn-border);
+    background: var(--cn-bg);
+    flex-shrink: 0;
+}
+
+.course-nav-summary-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.course-nav-summary-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cn-text);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.course-nav-summary-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--cn-text-secondary);
+    font-weight: 400;
+    flex-wrap: wrap;
+}
+
+.course-nav-summary-dot {
+    color: var(--cn-text-dim);
+    font-size: 10px;
+    line-height: 1;
+}
+
+.course-nav-expand-all-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--cn-accent);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color var(--cn-transition);
+    font-family: var(--cn-font);
+    white-space: nowrap;
+}
+
+.course-nav-expand-all-btn:hover {
+    background: var(--cn-accent-light);
+}
+
+.course-nav-expand-all-btn:focus-visible {
+    outline: 2px solid var(--cn-accent);
+    outline-offset: 1px;
+}
+
+/* ===================================================================
+   Content — scrollable area
+   =================================================================== */
+
+.course-nav-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.08) transparent;
+}
+
+.course-nav-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.course-nav-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.course-nav-content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+}
+
+.course-nav-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+/* ===================================================================
+   Section — Collapsible group header + body
+   =================================================================== */
+
+.course-nav-section {
+    border-bottom: 1px solid var(--cn-border);
+}
+
+.course-nav-section:last-child {
+    border-bottom: none;
+}
+
+/* Nested sections don't need their own bottom border */
+.course-nav-section .course-nav-section {
+    border-bottom: none;
+}
+
+/* ─── Section Header ─── */
+.course-nav-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--cn-bg-section);
+    transition: background-color var(--cn-transition);
+}
+
+.course-nav-section-header:hover {
+    background: var(--cn-bg-hover);
+}
+
+.course-nav-section-header:focus-visible {
+    outline: 2px solid var(--cn-accent);
+    outline-offset: -2px;
+}
+
+/* Nested section headers: indent + lighter background */
+.course-nav-section[data-depth="1"] > .course-nav-section-header {
+    padding-left: 36px;
+    background: var(--cn-bg);
+}
+
+.course-nav-section[data-depth="2"] > .course-nav-section-header {
+    padding-left: 52px;
+    background: var(--cn-bg);
+}
+
+.course-nav-section[data-depth="3"] > .course-nav-section-header {
+    padding-left: 68px;
+    background: var(--cn-bg);
+}
+
+/* ─── Chevron ─── */
+.course-nav-section-chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cn-text-secondary);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transform: rotate(-90deg);
+}
+
+.course-nav-section-chevron--open {
+    transform: rotate(0deg);
+}
+
+/* ─── Section Title Block ─── */
+.course-nav-section-title-block {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.course-nav-section-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cn-text);
+    line-height: 1.35;
+    word-wrap: break-word;
+}
+
+.course-nav-section-number {
+    color: var(--cn-text-secondary);
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.course-nav-section--active > .course-nav-section-header .course-nav-section-name {
+    color: var(--cn-text-bright);
+}
+
+/* Nested section names slightly smaller */
+.course-nav-section[data-depth="1"] > .course-nav-section-header .course-nav-section-name,
+.course-nav-section[data-depth="2"] > .course-nav-section-header .course-nav-section-name,
+.course-nav-section[data-depth="3"] > .course-nav-section-header .course-nav-section-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.course-nav-section-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--cn-text-secondary);
+    font-weight: 400;
+}
+
+.course-nav-section-meta-dot {
+    color: var(--cn-text-dim);
+    font-size: 10px;
+}
+
+/* ─── Section Body (expanded) ─── */
+.course-nav-section-body {
+    animation: cn-section-expand 0.2s ease-out;
+}
+
+@keyframes cn-section-expand {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Vertical guide for nested content */
+.course-nav-section[data-depth="0"] > .course-nav-section-body {
+    border-left: none;
+}
+
+.course-nav-section[data-depth="1"] > .course-nav-section-body,
+.course-nav-section[data-depth="2"] > .course-nav-section-body,
+.course-nav-section[data-depth="3"] > .course-nav-section-body {
+    border-left: 2px solid var(--cn-border-light);
+    margin-left: 28px;
+}
+
+/* ===================================================================
+   Content Item Row
+   =================================================================== */
+
+.course-nav-item {
+    position: relative;
+}
+
+.course-nav-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color var(--cn-transition);
+    user-select: none;
+    min-height: 42px;
+}
+
+.course-nav-item-row:hover {
+    background: var(--cn-bg-hover);
+}
+
+.course-nav-item-row:focus-visible {
+    outline: 2px solid var(--cn-accent);
+    outline-offset: -2px;
+    border-radius: 2px;
+}
+
+/* Items in sections get indent */
+.course-nav-section[data-depth="0"] > .course-nav-section-body > .course-nav-item > .course-nav-item-row {
+    padding-left: 46px;
+}
+
+.course-nav-section[data-depth="1"] > .course-nav-section-body > .course-nav-item > .course-nav-item-row {
+    padding-left: 20px;
+}
+
+.course-nav-section[data-depth="2"] > .course-nav-section-body > .course-nav-item > .course-nav-item-row {
+    padding-left: 20px;
+}
+
+/* ─── Active State ─── */
+.course-nav-item--active > .course-nav-item-row {
+    background: var(--cn-bg-active);
+}
+
+.course-nav-item--active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 3px;
+    background: var(--cn-accent);
+    border-radius: 0 3px 3px 0;
+}
+
+.course-nav-item--active > .course-nav-item-row:hover {
+    background: rgba(124, 58, 237, 0.08);
+}
+
+.course-nav-item--active .course-nav-item-title {
+    color: var(--cn-text-bright);
+    font-weight: 600;
+}
+
+/* ─── Completed State ─── */
+.course-nav-item--completed .course-nav-item-title {
+    color: var(--cn-text-secondary);
+}
+
+/* ─── Locked State ─── */
+.course-nav-item--locked > .course-nav-item-row {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.course-nav-item--locked > .course-nav-item-row:hover {
+    background: transparent;
+}
+
+/* ─── Status Icon ─── */
+.course-nav-item-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.course-nav-item-status--notstarted {
+    color: var(--cn-text-dim);
+}
+
+.course-nav-item-status--inprogress {
+    color: var(--cn-accent);
+}
+
+.course-nav-item-status--completed {
+    color: var(--cn-success);
+}
+
+.course-nav-item-status--locked {
+    color: var(--cn-text-dim);
+}
+
+/* ─── Content Type Icon ─── */
+.course-nav-item-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--cn-text-secondary);
+}
+
+.course-nav-item--active .course-nav-item-type {
+    color: var(--cn-accent);
+}
+
+.course-nav-item-type-svg {
+    display: block;
+}
+
+/* ─── Item Info (title) ─── */
+.course-nav-item-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.course-nav-item-title {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--cn-text);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.course-nav-item-number {
+    font-weight: 600;
+    color: var(--cn-text-dim);
+    margin-right: 4px;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.course-nav-item--active .course-nav-item-number {
+    color: var(--cn-accent);
+}
+
+/* ─── Description Expand Chevron (separate click target) ─── */
+.course-nav-item-expand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--cn-text-dim);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: color var(--cn-transition), transform 0.2s ease, background-color var(--cn-transition);
+}
+
+.course-nav-item-expand:hover {
+    color: var(--cn-text-secondary);
+    background: var(--cn-bg-hover);
+}
+
+.course-nav-item-expand:focus-visible {
+    outline: 2px solid var(--cn-accent);
+    outline-offset: 1px;
+}
+
+.course-nav-item-expand--open {
+    transform: rotate(180deg);
+}
+
+/* ─── Preview Badge ─── */
+.course-nav-item-preview {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cn-accent);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: rgba(124, 58, 237, 0.3);
+    text-underline-offset: 2px;
+    white-space: nowrap;
+}
+
+.course-nav-item-preview:hover {
+    text-decoration-color: var(--cn-accent);
+}
+
+/* ─── Duration ─── */
+.course-nav-item-duration {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--cn-text-dim);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* ─── Expandable Description ─── */
+.course-nav-item-desc {
+    padding: 0 20px 12px 46px;
+    animation: cn-desc-expand 0.15s ease-out;
+}
+
+.course-nav-section[data-depth="0"] > .course-nav-section-body > .course-nav-item > .course-nav-item-desc {
+    padding-left: 76px;
+}
+
+.course-nav-item-desc-text {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--cn-text-secondary);
+    white-space: pre-line;
+}
+
+@keyframes cn-desc-expand {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===================================================================
+   Ungrouped Items
+   =================================================================== */
+
+.course-nav-ungrouped {
+    border-bottom: 1px solid var(--cn-border);
+}
+
+.course-nav-ungrouped:last-child {
+    border-bottom: none;
+}
+
+/* ===================================================================
+   Empty & Loading States
+   =================================================================== */
+
+.course-nav-state-empty,
+.course-nav-state-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.course-nav-empty,
+.course-nav-loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.course-nav-empty-icon {
+    color: var(--cn-text-dim);
+    margin-bottom: 4px;
+}
+
+.course-nav-empty-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cn-text);
+}
+
+.course-nav-empty-hint {
+    margin: 0;
+    font-size: 12px;
+    color: var(--cn-text-secondary);
+    max-width: 280px;
+    line-height: 1.5;
+}
+
+.course-nav-loading-spinner {
+    width: 28px;
+    height: 28px;
+    border: 2.5px solid var(--cn-border);
+    border-top-color: var(--cn-accent);
+    border-radius: 50%;
+    animation: cn-spin 0.7s linear infinite;
+}
+
+@keyframes cn-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.course-nav-loading-text {
+    margin: 0;
+    font-size: 12px;
+    color: var(--cn-text-secondary);
+}
+
+/* ===================================================================
+   Responsive — Tablet
+   =================================================================== */
+
+@media (max-width: 768px) {
+    .course-nav-root {
+        border-radius: 0;
+    }
+
+    .course-nav-summary {
+        padding: 12px 16px;
+    }
+
+    .course-nav-section-header {
+        padding: 12px 16px;
+    }
+
+    .course-nav-section[data-depth="1"] > .course-nav-section-header {
+        padding-left: 28px;
+    }
+
+    .course-nav-section[data-depth="2"] > .course-nav-section-header {
+        padding-left: 40px;
+    }
+
+    .course-nav-section[data-depth="3"] > .course-nav-section-header {
+        padding-left: 52px;
+    }
+
+    .course-nav-item-row {
+        padding: 9px 16px;
+        gap: 8px;
+    }
+
+    .course-nav-section[data-depth="0"] > .course-nav-section-body > .course-nav-item > .course-nav-item-row {
+        padding-left: 36px;
+    }
+
+    .course-nav-section[data-depth="1"] > .course-nav-section-body > .course-nav-item > .course-nav-item-row {
+        padding-left: 16px;
+    }
+
+    .course-nav-section[data-depth="1"] > .course-nav-section-body,
+    .course-nav-section[data-depth="2"] > .course-nav-section-body,
+    .course-nav-section[data-depth="3"] > .course-nav-section-body {
+        margin-left: 20px;
+    }
+
+    .course-nav-item-desc {
+        padding-left: 36px;
+    }
+
+    .course-nav-section[data-depth="0"] > .course-nav-section-body > .course-nav-item > .course-nav-item-desc {
+        padding-left: 56px;
+    }
+}
+
+/* ===================================================================
+   Responsive — Mobile
+   =================================================================== */
+
+@media (max-width: 480px) {
+    .course-nav-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px 14px;
+    }
+
+    .course-nav-expand-all-btn {
+        align-self: flex-end;
+    }
+
+    .course-nav-section-header {
+        padding: 10px 14px;
+    }
+
+    .course-nav-section[data-depth="1"] > .course-nav-section-header {
+        padding-left: 24px;
+    }
+
+    .course-nav-section[data-depth="2"] > .course-nav-section-header {
+        padding-left: 32px;
+    }
+
+    .course-nav-section-name {
+        font-size: 13px;
+    }
+
+    .course-nav-item-row {
+        padding: 8px 14px;
+        gap: 8px;
+    }
+
+    .course-nav-section[data-depth="0"] > .course-nav-section-body > .course-nav-item > .course-nav-item-row {
+        padding-left: 30px;
+    }
+
+    .course-nav-item-title {
+        font-size: 12.5px;
+    }
+
+    .course-nav-item-duration {
+        font-size: 11px;
+    }
+
+    .course-nav-item-preview {
+        font-size: 10px;
+    }
+
+    .course-nav-item-desc {
+        padding: 0 14px 10px 30px;
+    }
+
+    .course-nav-section[data-depth="0"] > .course-nav-section-body > .course-nav-item > .course-nav-item-desc {
+        padding-left: 44px;
+    }
+
+    .course-nav-item-desc-text {
+        font-size: 12px;
+    }
+
+    /* Reduce nesting visual complexity on mobile */
+    .course-nav-section[data-depth="1"] > .course-nav-section-body,
+    .course-nav-section[data-depth="2"] > .course-nav-section-body,
+    .course-nav-section[data-depth="3"] > .course-nav-section-body {
+        margin-left: 14px;
+        border-left-width: 1px;
+    }
+}
